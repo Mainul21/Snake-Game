@@ -15,6 +15,8 @@ UPDATE_INTERVAL = 300  # milliseconds
 mood_selection = int(input("Enter 0 for easy and 1 for hard mood: "))
 
 
+
+
 # Directions
 DIR_UP = 1
 DIR_DOWN = -1
@@ -67,40 +69,30 @@ def check_collision():
         return True
     return False
 
-# def update_snake():
-#     global direction, snake, food, score, UPDATE_INTERVAL
-#     head = snake[0]
-#     if direction == DIR_UP:
-#         new_head = (head[0], head[1] + 1)
-#     elif direction == DIR_DOWN:
-#         new_head = (head[0], head[1] - 1)
-#     elif direction == DIR_LEFT:
-#         new_head = (head[0] - 1, head[1])
-#     elif direction == DIR_RIGHT:
-#         new_head = (head[0] + 1, head[1])
-
-
-    # # Check if snake eats food
-    # if new_head == food:
-    #     score += 1
-    #     snake.insert(0, new_head)
-    #     generate_food()
-    # else:
-    #     # Move snake
-    #     snake.pop()
-    #     snake.insert(0, new_head)
 
 def update_snake():
     global direction, snake, food, score, UPDATE_INTERVAL
     head = snake[0]
     if direction == DIR_UP:
-        new_head = (head[0], (head[1] + 1) % GRID_HEIGHT) if mood_selection == 0 else (head[0], head[1] + 1)
+        if mood_selection == 0:
+            new_head = (head[0], (head[1] + 1) % GRID_HEIGHT)  
+        else:
+            (head[0], head[1] + 1)
     elif direction == DIR_DOWN:
-        new_head = (head[0], (head[1] - 1) % GRID_HEIGHT) if mood_selection == 0 else (head[0], head[1] - 1)
+        if mood_selection == 0:
+            new_head = (head[0], (head[1] - 1) % GRID_HEIGHT)  
+        else:
+            (head[0], head[1] - 1)
     elif direction == DIR_LEFT:
-        new_head = ((head[0] - 1) % GRID_WIDTH, head[1]) if mood_selection == 0 else (head[0] - 1, head[1])
+        if mood_selection == 0:
+            new_head = ((head[0] - 1) % GRID_WIDTH, head[1]) 
+        else:
+            (head[0] - 1, head[1])
     elif direction == DIR_RIGHT:
-        new_head = ((head[0] + 1) % GRID_WIDTH, head[1]) if mood_selection == 0 else (head[0] + 1, head[1])
+        if mood_selection == 0:
+            new_head = ((head[0] + 1) % GRID_WIDTH, head[1]) 
+        else:
+            (head[0] + 1, head[1])
 
     # Check if snake eats food
     if new_head == food:
@@ -116,6 +108,14 @@ def update_snake():
 def display():
     global mood_selection
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    if mood_selection != 0 or mood_selection != 1:
+        print("NO GAME FOR YOU")
+        glutLeaveMainLoop()
+    else:
+        if mood_selection == 0:
+            print('Easy mood selected')
+        else:
+            print('Hard mood selected')
     draw_snake()
     draw_food()
     glRasterPos2f(10, 480)
