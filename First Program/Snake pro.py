@@ -114,9 +114,22 @@ def update_snake():
 
 
 def display():
+    global mood_selection
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     draw_snake()
     draw_food()
+    glRasterPos2f(10, 480)
+    for c in str(score):
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ord(c))
+    glRasterPos2f(450, 480)
+    if mood_selection == 0:
+        for c in 'easy':
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ord(c))
+    elif mood_selection == 1:
+        for c in 'hard':
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ord(c))
+    
+
     glutSwapBuffers()
 
 def keyboard(key, x, y):
