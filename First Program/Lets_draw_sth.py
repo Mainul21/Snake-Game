@@ -34,6 +34,8 @@ snake = [(GRID_WIDTH // 2, GRID_HEIGHT // 2)]
 direction = DIR_DOWN
 food = None
 score = 0
+pause = False
+pause_count = 0
 
 
 def draw_points(x, y):
@@ -205,6 +207,7 @@ def update_snake():
     if new_head == food:
         score += 1
         snake.insert(0, new_head)
+        UPDATE_INTERVAL-=8
         generate_food()
     else:
         # Move snake
@@ -232,8 +235,8 @@ def display():
 
     glutSwapBuffers()
 
-def keyboard(key, x, y):
-    global direction
+def keyboardSpecial(key, x, y):
+    global direction, pause, pause_count
     if key == GLUT_KEY_UP and direction != DIR_DOWN:
         direction = DIR_UP
     elif key == GLUT_KEY_DOWN and direction != DIR_UP:
@@ -243,14 +246,25 @@ def keyboard(key, x, y):
     elif key == GLUT_KEY_RIGHT and direction != DIR_LEFT:
         direction = DIR_RIGHT
 
+def keyboard(key, x,y):
+    global pause
+
+    if key == b" ":
+        pause = not pause
+
+
+
 
 def timer(value):
-    update_snake()
-    if check_collision():
-        print("Game Over! Score:", score)
-        glutLeaveMainLoop()
+    global pause_count, pause
+    if not pause:
+        update_snake()
+        if check_collision():
+            print("Game Over! Score:", score)
+            glutLeaveMainLoop()
     glutPostRedisplay()
     glutTimerFunc(UPDATE_INTERVAL, timer, 0)
+
 
 glutInit()
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
@@ -262,7 +276,8 @@ glLoadIdentity()
 gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT)
 glutDisplayFunc(display)
 glutTimerFunc(UPDATE_INTERVAL, timer, 0)
-glutSpecialFunc(keyboard)
+glutSpecialFunc(keyboardSpecial)
+glutKeyboardFunc(keyboard)
 generate_food()
 glutMainLoop()
 
