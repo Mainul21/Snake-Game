@@ -1,8 +1,8 @@
 Already done:
 -> Implementation of Logic
+-> Easy and Hard Levels
+-> Used Midpoint algorithm but need to fix some bugs
 
 Needs to be done:
 -> Draw using GL points
--> Use midpoint Line and Circle drawing algorithms
--> create easy and hard Level
 -> Do something with the game asthetics
