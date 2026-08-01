@@ -26,15 +26,24 @@ A browser-ready Snake game built for Python and Pygbag deployment.
 ## Installation
 
 1. Install Python 3.10+.
-2. Install required packages:
+2. Create and activate a virtual environment:
 
 ```bash
-pip install -r requirements.txt
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+3. Install required packages:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 ## Local execution
 
 ```bash
+source .venv/bin/activate
 python main.py
 ```
 
@@ -43,7 +52,8 @@ python main.py
 From the repository root:
 
 ```bash
-python -m pygbag .
+source .venv/bin/activate
+python -m pygbag --build --disable-sound-format-error .
 ```
 
 This generates a `build/web/` folder containing the browser build. Host that

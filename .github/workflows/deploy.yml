@@ -24,7 +24,7 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           python -m pip install --upgrade pip
-          python -m pip install pygame-ce pygbag
+          python -m pip install -r requirements.txt
 
       - name: Build web package with pygbag
         run: |
