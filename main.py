@@ -1,7 +1,6 @@
-import asyncio
 import random
 import pygame
-from pygame.locals import QUIT, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_r, K_e, K_h
+from pygame.locals import QUIT, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_r, K_e, K_h, K_q
 
 GRID_SIZE = 10
 GRID_WIDTH = 50
@@ -77,7 +76,7 @@ def reset_game(mode):
     return snake, direction, food, score, interval
 
 
-async def main():
+def main():
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Snake Game")
@@ -116,9 +115,13 @@ async def main():
                         state = "playing"
                         paused = False
                         pygame.time.set_timer(MOVE_EVENT, interval)
+                    elif event.key == K_q:
+                        running = False
                 elif state == "playing":
                     if event.key == K_SPACE:
                         paused = not paused
+                    elif event.key == K_q:
+                        running = False
                     elif event.key == K_UP and direction != DIR_DOWN:
                         direction = DIR_UP
                     elif event.key == K_DOWN and direction != DIR_UP:
@@ -133,6 +136,8 @@ async def main():
                         state = "playing"
                         paused = False
                         pygame.time.set_timer(MOVE_EVENT, interval)
+                    elif event.key == K_q:
+                        running = False
 
             elif event.type == MOVE_EVENT and state == "playing" and not paused:
                 new_head = move_head(snake[0], direction, mode)
@@ -175,10 +180,9 @@ async def main():
 
         pygame.display.flip()
         clock.tick(60)
-        await asyncio.sleep(0)
 
     pygame.quit()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
