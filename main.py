@@ -1,3 +1,4 @@
+import asyncio
 import random
 import pygame
 from pygame.locals import QUIT, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_r, K_e, K_h, K_q
@@ -76,7 +77,7 @@ def reset_game(mode):
     return snake, direction, food, score, interval
 
 
-def main():
+async def main():
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Snake Game")
@@ -180,9 +181,10 @@ def main():
 
         pygame.display.flip()
         clock.tick(60)
+        await asyncio.sleep(0)  # yield to the browser (required by pygbag)
 
     pygame.quit()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
