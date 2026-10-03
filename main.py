@@ -26,8 +26,6 @@ DIR_RIGHT = (1, 0)
 MODE_EASY = 0
 MODE_HARD = 1
 
-MOVE_EVENT = pygame.USEREVENT + 1
-
 
 def clamp_speed(value):
     return max(MIN_INTERVAL, value)
@@ -88,7 +86,7 @@ async def main():
     state = "menu"
     paused = False
     snake, direction, food, score, interval = reset_game(mode)
-    pygame.time.set_timer(MOVE_EVENT, interval)
+    next_move = pygame.time.get_ticks() + interval
     clock = pygame.time.Clock()
 
     running = True
@@ -103,24 +101,25 @@ async def main():
                         snake, direction, food, score, interval = reset_game(mode)
                         state = "playing"
                         paused = False
-                        pygame.time.set_timer(MOVE_EVENT, interval)
+                        next_move = pygame.time.get_ticks() + interval
                     elif event.key == K_h:
                         mode = MODE_HARD
                         snake, direction, food, score, interval = reset_game(mode)
                         state = "playing"
                         paused = False
-                        pygame.time.set_timer(MOVE_EVENT, interval)
+                        next_move = pygame.time.get_ticks() + interval
                     elif event.key == K_SPACE:
                         mode = MODE_EASY
                         snake, direction, food, score, interval = reset_game(mode)
                         state = "playing"
                         paused = False
-                        pygame.time.set_timer(MOVE_EVENT, interval)
+                        next_move = pygame.time.get_ticks() + interval
                     elif event.key == K_q:
                         running = False
                 elif state == "playing":
                     if event.key == K_SPACE:
                         paused = not paused
+                        next_move = pygame.time.get_ticks() + interval
                     elif event.key == K_q:
                         running = False
                     elif event.key == K_UP and direction != DIR_DOWN:
@@ -136,24 +135,24 @@ async def main():
                         snake, direction, food, score, interval = reset_game(mode)
                         state = "playing"
                         paused = False
-                        pygame.time.set_timer(MOVE_EVENT, interval)
+                        next_move = pygame.time.get_ticks() + interval
                     elif event.key == K_q:
                         running = False
 
-            elif event.type == MOVE_EVENT and state == "playing" and not paused:
-                new_head = move_head(snake[0], direction, mode)
-                snake.insert(0, new_head)
-                if new_head == food:
-                    score += 1
-                    interval = clamp_speed(interval - SPEED_STEP)
-                    pygame.time.set_timer(MOVE_EVENT, interval)
-                    food = generate_food(snake)
-                else:
-                    snake.pop()
+        now = pygame.time.get_ticks()
+        if state == "playing" and not paused and now >= next_move:
+            next_move = now + interval
+            new_head = move_head(snake[0], direction, mode)
+            snake.insert(0, new_head)
+            if new_head == food:
+                score += 1
+                interval = clamp_speed(interval - SPEED_STEP)
+                food = generate_food(snake)
+            else:
+                snake.pop()
 
-                if check_collision(snake, mode):
-                    state = "game_over"
-                    pygame.time.set_timer(MOVE_EVENT, 0)
+            if check_collision(snake, mode):
+                state = "game_over"
 
         screen.fill(COLOR_BACKGROUND)
 
