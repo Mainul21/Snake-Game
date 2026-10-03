@@ -2,6 +2,8 @@
 
 A browser-ready Snake game built for Python and Pygbag deployment.
 
+**[Play it live](https://mainul21.github.io/Snake-Game/)** — click the page once if prompted, then press E, H or Space.
+
 ## Screenshot
 
 (Add a screenshot of the game here)
@@ -59,6 +61,13 @@ python -m pygbag --build --disable-sound-format-error .
 This generates a `build/web/` folder containing the browser build. Host that
 folder's contents (e.g. via GitHub Pages) to play in a browser.
 
+Pushing to `main` deploys automatically: the GitHub Actions workflow builds with
+Pygbag and publishes to the `gh-pages` branch (Settings → Pages → `gh-pages`).
+
+Browser notes: the main loop must be `async` and call `await asyncio.sleep(0)`
+each frame, and `pygame.time.set_timer` is not available on WASM, so timing uses
+`pygame.time.get_ticks()`.
+
 ## Technologies used
 
 - Python
@@ -82,11 +91,11 @@ folder's contents (e.g. via GitHub Pages) to play in a browser.
 
 ## Live Demo
 
-(Add GitHub Pages link here)
+https://mainul21.github.io/Snake-Game/
 
 ## GitHub Repository
 
-(Add repository URL here)
+https://github.com/Mainul21/Snake-Game
 
 ## License
 
